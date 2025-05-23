@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "None",
+    "lib": ["ES5"],
+    "outDir": "./dist",
+    "allowJs": true
+  },
+  "include": ["**/*.ts", "**/*.js"]
+}
