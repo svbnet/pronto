@@ -1,0 +1,2701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ %name: grammar-merged.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Tue May 12 11:48:28 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+<grammar rev="2"><!--
+ %name: grammar-merged.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Tue May 12 11:48:28 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFOBJECT" classid="0">
+    <attrib name="ObjectType" type="U16">
+      <para>Type of object</para>
+    </attrib>
+    <attrib name="ExtensionCount" type="U8">
+      <para>Extension count</para>
+    </attrib>
+    <attrib name="RootType" type="U8">
+      <para>Root type</para>
+    </attrib>
+  </class>
+  <!--
+ %name: grammar-merged.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Tue May 12 11:48:28 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFARRAY" classid="101">
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="TypeOfData" type="U16">
+      <para>Type of the elements</para>
+    </attrib>
+    <attrib name="NrOfElements" type="U16">
+      <para>Number of elements in the array</para>
+    </attrib><!--
+  <attrib name="Element" type="Pointer"><para>Pointers to elements</para></attrib>
+--></class>
+  <!--
+ %name: grammar-merged.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Tue May 12 11:48:28 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFACTIONLIST" classid="105">
+    <para>
+      An ActionList structure contains a pointer to a
+      list of Action pointers to be executed when some event
+      occurred. An example of an event is a hard key being pressed.
+    </para>
+    <note>
+      <para>
+        There are also GID's that add functionality to the device,
+        however they are not the same as actions.
+      </para>
+      <para>*FIXME* - Refer to the GID document</para>
+    </note>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="cfActions" type="Pointer" ptrtgt="S_CFACTION" array="1">
+      <para>The actions to perform.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFACTION.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:14 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFACTION" classid="300">
+    <para>
+      An action is something that needs to be executed
+      when an action list is being played.
+    </para>
+    <note>
+      <para>
+        There are also GID's that add functionality to the
+        device, however they are not the same as actions.
+      </para>
+    </note>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+  </class>
+  <!--
+ %name: S_CFACTIVITYALIAS.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:16 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFACTIVITYALIAS" classid="308">
+    <para>The ActivityAlias structure contains the pointers required to perform an ActivityAlias action.</para>
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="cfActivity" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>Activitiy to jump to</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFACTIVITY.xml %
+ %created_by: ycl %
+ %version: 4 %
+ %date_created: Mon Mar 16 16:26:23 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFACTIVITY" classid="404">
+    <masks>
+      <mask value="1" name="SCRIPT" /><mask value="8" name="BACKGROUND" /><mask value="16" name="ACTIONLIST" />
+    </masks>
+    <para>
+      The Activity structure forms the entry point for an Activity,
+      like home, activities, macros and system area. It contains general
+      information about the activity.
+    </para>
+    <attrib name="LabelledObject" type="S_CFLABELLEDOBJECT" ancestor="1" />
+    <attrib name="cfHardKeys" type="Pointer" ptrtgt="S_CFHARDKEY" array="1">
+      <para>The hard keys associated with the activity</para>
+    </attrib>
+    <attrib name="cfPages" type="Pointer" ptrtgt="S_CFPAGE" array="1">
+      <para>The pages contained in the activity</para>
+    </attrib>
+    <attrib name="activityBitmask" type="U8">
+      <bitmask>
+        <bit index="0" name="Music">
+          <para>CE Server media content type</para>
+        </bit>
+        <bit index="1" name="Movies">
+          <para>CE Server media content type</para>
+        </bit>
+        <bit index="2" name="Radio">
+          <para>CE Server media content type</para>
+        </bit>
+        <bit index="3" name="Pictures">
+          <para>CE Server media content type</para>
+        </bit>
+        <bit index="4" name="Hidden">
+          <para>Whether the activity should be hidden (1) or not (0)</para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" /><attrib name="unAlloc1" type="U16" padding="1" />
+    <attrib name="cfScriptName" type="Pointer" mask="1" ptrtgt="S_CFSTRING">
+      <para>The name of this activity when used in a script.</para>
+    </attrib>
+    <attrib name="cfScript" type="Pointer" mask="1" ptrtgt="S_CFSCRIPT">
+      <para>The activity script.</para>
+    </attrib>
+    <attrib name="cfActionList" type="Pointer" mask="16" ptrtgt="S_CFACTIONLIST">
+      <para>The actions (macro) for this Activity.</para>
+    </attrib>
+    <attrib name="cfBackground" type="Pointer" mask="8" ptrtgt="S_CFIMAGE">
+      <para>Image to use as background when in activity.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFBITMAP.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:17 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFBITMAP" classid="201">
+    <para>
+      The Bitmap structure contains information about bitmaps for
+      buttons, icons... The bitmap is stored in a format optimized for
+      display on the Control Panel.
+    </para>
+    <attrib name="Image" type="S_CFIMAGE" ancestor="1" />
+    <attrib name="TransparencyColor" type="T_ColorRef">
+      <para>RGB value to be used as transparency color</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFBOOLEANSTATEMENT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:18 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFBOOLEANSTATEMENT" classid="357">
+    <para>
+      Represents a Boolean statement command to be sent to
+      an extender. These statements allow combining the results
+      of one or more statements using Boolean logic.
+    </para>
+    <attrib name="Statement" type="S_CFSTATEMENT" ancestor="1" />
+    <attrib type="U8" name="BooleanStatementType">
+      <para>Type of the Boolean statement.</para>
+      <enum prefix="BOOLEAN">
+        <entry value="0" name="AND" /><entry value="1" name="OR" /><entry value="2" name="XOR" />
+        <entry value="3" name="NOT" />
+      </enum>
+    </attrib>
+    <attrib type="U8" name="PaddingByte" padding="1" /><attrib type="U16" name="PaddingBytes" padding="1" />
+    <attrib type="Pointer" name="cfFirstConditionalStatement" ptrtgt="S_CFSTATEMENT">
+      <para>first condition operand</para>
+    </attrib>
+    <attrib type="Pointer" name="cfSecondConditionalStatement" ptrtgt="S_CFSTATEMENT">
+      <para>second condition operand</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFBUTTONALIAS.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:19 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFBUTTONALIAS" classid="302">
+    <para>
+      The ButtonAlias structure contains the pointers
+      required to perform a ButtonAlias action.
+    </para>
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="cfActivity" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>Activity to jump to</para>
+    </attrib>
+    <attrib name="cfButton" type="Pointer" ptrtgt="S_CFBUTTON">
+      <para>Button (within the acitivity) to jump to</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFBUTTON.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Fri Nov  7 12:17:04 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFBUTTON" classid="501">
+    <masks>
+      <mask value="1" name="SCRIPT" />
+    </masks>
+    <para>
+      A button is a <classname>S_CFVISUALOBJECT</classname> item. As stated before,
+      an <classname>S_CFVISUALOBJECT</classname> structure does
+      not exist. This is more of a meta structure for the actual items, one of which
+      is the button.
+    </para>
+    <attrib name="VisualObject" type="S_CFVISUALOBJECT" ancestor="1" />
+    <attrib name="buttonBitmask" type="U8">
+      <bitmask>
+        <bits from="0" to="2" name="SubType">
+          <enum prefix="CF_BUTTONSUBTYPE">
+            <entry value="0" name="NORMAL">
+              <para>
+                A normal button;
+                responds when it is pressed and then
+                when it is released. This is the default type.
+              </para>
+            </entry>
+            <entry value="1" name="TOGGLE">
+              <para>A toggle button; remains pressed until it is pressed again.</para>
+            </entry>
+            <entry value="2" name="ENUM">
+              <para>
+                Enumeration button; like a normal button but it
+                contains extra bitmaps to support a string of different
+                looks. Every time an enumeration button is pressed,
+                it will shift to the next bitmap in a circular manner.
+              </para>
+            </entry>
+          </enum>
+        </bits>
+      </bitmask>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" />
+    <attrib name="Gid" type="T_Gid">
+      <para>Gid of the button</para>
+    </attrib>
+    <attrib name="TextColorPressed" type="T_ColorRef">
+      <para>text color of the button for the pressed state</para>
+    </attrib>
+    <attrib name="TextBGColorPressed" type="T_ColorRef">
+      <para>text background color of the button for the pressed state</para>
+    </attrib>
+    <attrib name="cfActionList" type="Pointer" ptrtgt="S_CFACTIONLIST">
+      <para>actions for this button.</para>
+    </attrib>
+    <attrib name="cfScriptName" type="Pointer" mask="1" ptrtgt="S_CFSTRING">
+      <para>name of this button when used in a script.</para>
+    </attrib>
+    <attrib name="cfScript" type="Pointer" mask="1" ptrtgt="S_CFSCRIPT">
+      <para>button script.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFCESERVER.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:20 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFCESERVER" classid="405">
+    <masks>
+      <mask value="2" name="PLAYERZONE" /><mask value="4" name="ACTIONLIST" />
+    </masks>
+    <para>
+      This structure represents an Audio/Video server
+      activity that can play multimedia content and that
+      can be controlled using the Maestro.
+    </para>
+    <attrib name="Activity" type="S_CFACTIVITY" ancestor="1" ancestormask="0">
+      <para>
+        It is effectively a specialization of a user device that has
+        more properties than a normal device.
+      </para>
+    </attrib>
+    <attrib name="IpAddress" type="U8" count="16">
+      <para>Array of 16 characters representing the well known IP format xxx.xxx.xxx.xxx</para>
+    </attrib>
+    <attrib name="PortNumber" type="U16">
+      <para>IP Port number to communicate with this server.</para>
+    </attrib>
+    <attrib name="unAlloc" type="U16" padding="1" />
+    <attrib name="ServerName" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>Name for the server instead of an IP Address, can be used to discover the server on the network</para>
+    </attrib>
+    <attrib name="Brand" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>
+        brand identifier of this Audio/Video server
+        (currently <literal>ESCIENT</literal>,
+        <literal>IMERGE</literal> and <literal>MCEPC</literal>)
+      </para>
+    </attrib>
+    <attrib name="PlayerName" type="Pointer" mask="2" ptrtgt="S_CFSTRING"><!-- PLAYERZONE -->
+      <para>player name (if supported by the CE Server)</para>
+    </attrib>
+    <attrib name="cfActionList" type="Pointer" mask="4" ptrtgt="S_CFACTIONLIST"><!-- ACTIONLIST -->
+      <para>the actions (macro) for this Activity.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFCONTROLFLOW.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:21 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFCONTROLFLOW" classid="356">
+    <para>
+      Represents a Control Flow command to be sent to an extender.
+      These statements alter the flow of execution within a block.
+    </para>
+    <attrib name="Statement" type="S_CFSTATEMENT" ancestor="1" />
+    <attrib type="U8" name="ControlFlowStatementType">
+      <para>Type of the Control Flow statement.</para>
+      <enum prefix="CONTROLFLOW">
+        <entry value="0" name="IFELSE" /><entry value="1" name="END" />
+      </enum>
+    </attrib>
+    <attrib type="U8" name="PaddingByte" padding="1" /><attrib type="U16" name="PaddingBytes" padding="1" />
+    <attrib type="Pointer" name="cfConditionalStatement" ptrtgt="S_CFSTATEMENT">
+      <para>Any <classname>S_CFSTATEMENT</classname> to be used as a condition</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFDBCODE.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:21 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFDBCODE" classid="352">
+    <masks>
+      <mask value="1" name="DEVICE" />
+    </masks>
+    <para>The DBCode represents the DataBase Code.</para>
+    <para>
+      It contains all properties needed to retrieve the actual
+      IR code indexed by the UDP_ properties.
+    </para>
+    <attrib name="Function" type="S_CFFUNCTION" ancestor="1" />
+    <attrib name="UDP_BrandId" type="U16">
+      <para>brand ID of this database code</para>
+    </attrib>
+    <attrib name="UDP_CodeSetId" type="U16">
+      <para>code set ID of this database code</para>
+    </attrib>
+    <attrib name="UDP_DeviceId" type="U8">
+      <para>device ID of this database code</para>
+    </attrib>
+    <attrib name="UDP_FunctionId" type="U8">
+      <para>function ID of this database code</para>
+    </attrib>
+    <attrib name="Duration" type="T_IrDuration">
+      <para>Duration that the IR code should be sent</para>
+    </attrib>
+    <attrib name="cfDevice" type="Pointer" ptrtgt="S_CFDEVICE" mask="1">
+      <para>device that this function belongs to.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFDELAY.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:22 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFDELAY" classid="306">
+    <para>This represents a delay action.</para><attrib name="Function" type="S_CFFUNCTION" ancestor="1" />
+    <attrib name="Duration" type="U32">
+      <para>Duration of this delay action. In milliseconds.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFDEVICE.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:23 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFDEVICE" classid="401">
+    <para>
+      The Device Structure forms the entry point for a device. It contains
+      the information relevant for a device as defined in the editor.
+    </para>
+    <note>
+      <para>
+        This structure is only filled from PEP 2.0 onwards. In PEP1.x
+        Activities and devices are one and the same since there is no split
+        between GUI and control. Starting from PEP 2.0 this is introduced so
+        the existing <classname>S_CFACTIVITY</classname> structure will carry the GUI information and
+        the <classname>S_CFDEVICE</classname> structure will carry the control information.
+      </para>
+    </note>
+    <attrib name="LabelledObject" type="S_CFLABELLEDOBJECT" ancestor="1" />
+    <attrib name="cfExtender" type="Pointer" ptrtgt="S_CFEXTENDER">
+      <para>The extender associated with a device</para>
+    </attrib>
+    <attrib name="cfPort" type="Pointer" ptrtgt="S_CFPORT">
+      <para>The extender port associated with the device</para>
+    </attrib>
+    <attrib name="cfScriptName" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>The name of this activity when used in a script.</para>
+    </attrib>
+    <attrib name="cfFunctions" type="Pointer" ptrtgt="S_CFFUNCTION" array="1">
+      <para>
+        The functions defined for the device. The type of the functions is
+        dependant on the device type.
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Devices of type <classname>S_CFSERIALDEVICE</classname> contain
+            <classname>S_CFSERIALCOMMAND</classname> functions.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Devices of type <classname>S_CFIRDEVICE</classname>
+            contain <classname>S_CFIRCODE</classname> and/or
+            <classname>S_CFDBCODE</classname> functions.
+          </para>
+        </listitem>
+      </itemizedlist>
+      <note>
+        <para>
+          Functions are not duplicated in the CF, if a device function is used in
+          different ActionLists only an <classname>S_CFFUNCTION</classname>
+          structure will be present in CF and
+          it will be referenced by the ActionLists. This restriction is possible since
+          serial and IR functions can’t be edited per actionlist in PEP2.0.
+        </para>
+        <para>
+          If this restriction becomes invalid then the <classname>S_CFDEVICE</classname>
+          should reference the
+          <classname>S_CFFUNCTION</classname> with the original values and the actionlist will reference
+          copies of the original function with the modified values but the function
+          data itself remains unduplicated and referenced by the original and the copies.
+        </para>
+      </note>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFETHERNETCONFIG.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Fri Nov  7 12:17:14 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFETHERNETCONFIG" classid="109" since="3.2">
+    <para>
+      This structure defines the Ethernet properties
+      to be used when an Ethernet interface is available
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="ip_config" type="Pointer" ptrtgt="S_CFIP_CONF_EXT">
+      <para>IP configuration for the Ethernet interface</para>
+    </attrib>
+    <attrib name="interfaceIndex" type="U8">
+      <para>Number from 0 to 255. Default is 0.</para>
+    </attrib>
+    <attrib name="ethernetBitmask" type="U8">
+      <bitmask>
+        <bit index="0" name="Enabled">
+          <para>
+            indicates if Ethernet is enabled (1) or
+            disabled (0).
+          </para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib name="paddingBytes" type="U16" padding="1" />
+  </class>
+  <!--
+ %name: S_CFEXTENDER.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:24 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFEXTENDER" classid="402">
+    <para>
+      This structure represents the extender used
+      to control high end equipment using different kinds of ports.
+    </para>
+    <attrib name="LabelledObject" type="S_CFLABELLEDOBJECT" ancestor="1" />
+    <attrib name="IpAddress" type="U8" count="16">
+      <para>Array of 16 characters representing the well known IP format xxx.xxx.xxx.xxx</para>
+    </attrib>
+    <attrib name="cfPorts" type="Pointer" ptrtgt="S_CFPORT" array="1">
+      <para>Ports associated with the extender</para>
+    </attrib><!-- following fields not present in DemoCF.cf --><attrib name="SubType" type="U8">
+      <para>Type of extender.</para>
+      <enum prefix="CF_EXTENDERSUBTYPE">
+        <entry value="0" name="BASIC" /><entry value="1" name="ADVANCED" />
+      </enum>
+    </attrib>
+    <attrib name="UnAlloc" type="U8" padding="1" /><attrib name="UnAlloc2" type="U16" padding="1" />
+  </class>
+  <!--
+ %name: S_CFFIRMKEY.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:25 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFFIRMKEY" classid="176">
+    <masks>
+      <mask value="2" name="SCRIPT" />
+    </masks>
+    <para>
+      A firm key is a hard button that has a corresponding Button
+      on the LCD display. The Button can contain the label of the firm
+      key, describing the actual function of the firm key.
+    </para>
+    <para>
+      The FirmKey structure consists of an identifier of the hard
+      button, a pointer to the Button and a pointer to an action list
+      that must be played when the firm key is being pressed.
+    </para>
+    <attrib name="Object" type="S_CFHARDKEY" ancestor="1" ancestormask="0" />
+    <attrib name="cfLabel" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>Label of the firm key.</para>
+    </attrib>
+    <attrib name="cfFirmKeyButton" type="Pointer" ptrtgt="S_CFBUTTON">
+      <para>Soft button associated with the firm key.</para>
+    </attrib>
+    <attrib name="cfScript" type="Pointer" mask="2" ptrtgt="S_CFSCRIPT">
+      <para>Firm key script.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFFILE.xml %
+ %created_by: ycl %
+ %version: 5 %
+ %date_created: Wed Mar 18 15:59:09 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008, 2009 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFFILE" classid="108">
+    <masks>
+      <mask value="1" name="TYPED" />
+    </masks>
+    <para>
+      This structure contains a pointer to raw binary data.  In
+      CF format versions prior to 3.3, this structure was called
+      <classname>S_CFFONTFILE</classname>, and was specific to
+      TrueType or OpenType files.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="FileName" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>Filename associated with the raw binary data.</para>
+    </attrib>
+    <attrib name="FileSize" type="DataLenU32">
+      <para>The size of the binary data</para>
+    </attrib>
+    <attrib name="cfData" type="DataPointer"><!-- dataPtr --><para>
+        Pointer to file content stored in CF. If the structure is
+        interpreted as a font, a null value will cause the default
+        panel font to be used.
+      </para>
+    </attrib>
+    <attrib name="FileType" type="U16" mask="1">
+      <enum>
+        <entry value="0x0000">Font (generic)</entry><entry value="0x0100">Script (generic)</entry>
+        <entry value="0x0101">
+          Script: JavaScript, UTF-8 encoding
+          (MIME type: <literal>application/javascript; charset=utf-8</literal>)
+        </entry>
+        <entry value="0x0102">Script: JavaScript, UTF-8 encoding (encrypted)</entry>
+        <entry value="0x0200">Image (generic)</entry>
+        <entry value="0x0201">
+          Image: PNG image
+          (MIME type: <literal>image/png</literal>)
+        </entry>
+        <entry value="0x0202">
+          Image: JPEG image
+          (MIME type: <literal>image/jpeg</literal>)
+        </entry>
+        <entry value="0x0203">Image: BMP image</entry><entry value="0x0300">Audio (generic)</entry>
+        <entry value="0x0301">Audio: WAV file</entry>
+        <entry value="0x0302">
+          Audio: MPEG-1 or MPEG-2 stream containing
+          audio compressed with
+          layer I, layer II or layer III compression
+          (MIME type: <literal>audio/mpeg</literal>)
+        </entry>
+        <entry value="0x0310">
+          Audio: Ogg bitstream containing
+          audio data
+          (MIME type: <literal>audio/ogg</literal>)
+        </entry>
+        <entry value="0x0311">
+          Audio: Ogg bitstream containing
+          audio data compressed with the Vorbis codec
+          (MIME type: <literal>audio/ogg; codecs=vorbis</literal>)
+        </entry>
+        <entry value="0x0312">
+          Audio: Ogg bitstream containing
+          audio data compressed with the Speex codec
+          (MIME type: <literal>audio/ogg; codecs=speex</literal>)
+        </entry>
+        <entry value="0xF000">
+          Text
+          (MIME type: <literal>text/plain</literal>)
+        </entry>
+        <entry value="0xF001">
+          Text: Unicode, UTF-8 encoding
+          (MIME type: <literal>text/plain; charset=utf-8</literal>)
+        </entry>
+        <entry value="0xFF00">
+          Binary
+          (MIME type: <literal>application/octet-stream</literal>)
+        </entry>
+      </enum>
+    </attrib>
+    <attrib name="unAlloc" type="U16" mask="1" padding="1" />
+  </class>
+  <!--
+ %name: S_CFFONT.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Thu Mar  5 10:53:49 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008, 2009 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFFONT" classid="106">
+    <masks>
+      <mask value="1" name="FILE" />
+    </masks>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="cfName" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>The name of the font.</para>
+      <para>
+        Name “FONT_NONE” and a NULL pointer for this
+        field behave the same.
+      </para>
+    </attrib>
+    <attrib name="Size" type="U8">
+      <para>The size of the font</para>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" /><attrib name="unAlloc1" type="U16" padding="1" />
+    <attrib name="cfFontFile" type="Pointer" mask="1" ptrtgt="S_CFFILE">
+      <para>If null or the extention is not set, the default font is used.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFFUNCTION.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:27 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFFUNCTION" classid="350">
+    <para>This structure encapsulates all actions that can be sent to an extender.</para>
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="Name" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>name of this function</para>
+    </attrib>
+    <attrib name="cfExtender" type="Pointer" ptrtgt="S_CFEXTENDER">
+      <para>extender on which to execute the function</para>
+    </attrib>
+    <attrib name="PortNumber" type="U8">
+      <para>Port number of the extender</para>
+    </attrib>
+    <attrib name="PaddingByte" type="U8" padding="1" /><attrib name="PaddingBytes" type="U16" padding="1" />
+  </class>
+  <!--
+ %name: S_CFHARDKEY.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:27 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFHARDKEY" classid="175">
+    <masks>
+      <mask value="1" name="SCRIPT" />
+    </masks>
+    <para>The HardKey structure describes a hard key. A hard key has an identifier and an action list.</para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="KeyID" type="U8">
+      <para>Id of the hard key, as defined by its position in the key matrix</para>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" />
+    <attrib name="Gid" type="T_Gid">
+      <para>Gid of this hardkey</para>
+    </attrib>
+    <attrib name="cfActionList" type="Pointer" ptrtgt="S_CFACTIONLIST">
+      <para>Actions to perform.</para>
+    </attrib>
+    <attrib name="cfScript" type="Pointer" mask="1" ptrtgt="S_CFSCRIPT">
+      <para>Hard key script.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFIMAGE.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:28 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFIMAGE" classid="200">
+    <para>This structure abstracts the concept of an image (bitmap, png etc.)</para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="Size" type="DataLenU32">
+      <para>The size of the bitmap data in bytes</para>
+    </attrib>
+    <attrib name="IsTransparent" type="U8">
+      <para>
+        Indicates whether this image has transparency information. If
+        i.e. a transparency color is set or an alpha mask is provided it
+        can be that this property is set to false and that we thus have
+        to discard this information.
+      </para>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" /><attrib name="unAlloc1" type="U16" padding="1" />
+    <attrib name="cfData" type="DataPointer">
+      <para>Pointer to the binary data</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFIOCOMMAND.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:29 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFIOCOMMAND" classid="355">
+    <para>Represents an I/O command to be sent to an extender.</para>
+    <attrib name="Statement" type="S_CFSTATEMENT" ancestor="1" />
+    <attrib type="U8" name="IOStatementType">
+      <para>Type of the I/O statement.</para>
+      <enum prefix="IO">
+        <entry value="0" name="GET" /><entry value="1" name="WAIT" /><entry value="2" name="MATCH" />
+        <entry value="3" name="SET" /><entry value="4" name="TOGGLE" />
+      </enum>
+    </attrib>
+    <attrib type="U8" name="State">
+      <para>State of the port to read.</para>
+      <enum prefix="IO_STATE">
+        <entry value="0" name="LOW" /><entry value="1" name="HIGH" />
+      </enum>
+    </attrib>
+    <attrib type="U16" name="PaddingBytes" padding="1" />
+    <attrib type="U32" name="TimeOut">
+      <para>Number of milliseconds to wait for port to change state</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFIP_CONF_EXT.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Fri Nov  7 12:17:23 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFIP_CONF_EXT" classid="110" since="3.2">
+    <para>
+      This structure defines the properties to be stored for
+      IP configuration. It improves on S_CFIP_CONF that is still
+      used as a contained structure part of S_CFWIFI, this can’t
+      be changed anymore for backwards compatibility with older
+      firmware. From now on any new definition of IP settings
+      should be done using a pointer to S_CFIP_CONF_EXT.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="cfipConfBitmask" type="U8">
+      <bitmask>
+        <bit index="0" name="dhcp">
+          <para>Indicates whether DHCP is enabled (1) of not (0).</para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib name="address" type="U8" count="16">
+      <para>IP address of the Maestro device. Array of 16 characters representing the well known IP format xxx.xxx.xxx.xxx.</para>
+    </attrib>
+    <attrib name="netmask" type="U8" count="16">
+      <para>Netmask for the network the Maestro device is connected to. See Address for the format description.</para>
+    </attrib>
+    <attrib name="gateway" type="U8" count="16">
+      <para>Gateway for the network the Maestro device is connected to. See Address for the format description.</para>
+    </attrib>
+    <attrib name="dns" type="U8" count="16">
+      <para>Character array specifying the dns properties in dotted notation.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFIP_CONF.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:29 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFIP_CONF">
+    <para>
+      This structure defines the properties to be
+      stored for IP configuration. It is part of the IP network settings.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1">
+      <para>
+        Since this structure has been used as a contained structure
+        it can’t be extended and no type has been assigned to it.
+      </para>
+    </attrib>
+    <attrib name="address" type="U8" count="16">
+      <para>IP address of the Maestro device. Array of 16 characters representing the well known IP format xxx.xxx.xxx.xxx.</para>
+    </attrib>
+    <attrib name="netmask" type="U8" count="16">
+      <para>Netmask for the network the Maestro device is connected to. See Address for the format description.</para>
+    </attrib>
+    <attrib name="gateway" type="U8" count="16">
+      <para>Gateway for the network the Maestro device is connected to. See Address for the format description.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFIRCODE.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:31 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFIRCODE" classid="351">
+    <masks>
+      <mask value="1" name="DEVICE" />
+    </masks>
+    <para>The IRCode structure contains the IR data that needs to be sent to a consumer device.</para>
+    <attrib name="Function" type="S_CFFUNCTION" ancestor="1" />
+    <attrib name="IrType" type="U8">
+      <para>The type of this IR Code.</para>
+      <enum prefix="IRTYPE">
+        <entry value="0" name="ECF" /><entry value="1" name="HEX" />
+      </enum>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" />
+    <attrib name="Size" type="DataLenU16">
+      <para>Size of the IR-code</para>
+    </attrib>
+    <attrib name="cfData" type="DataPointer">
+      <para>
+        Pointer to IR-code data. CF does not define the format
+        of this data, in order not to impose constraints on the format.
+      </para>
+    </attrib>
+    <attrib name="Duration" type="T_IrDuration">
+      <para>Duration that the IR code should be sent</para>
+    </attrib>
+    <attrib name="PaddingBytes" type="U16" padding="1" />
+    <attrib name="cfDevice" type="Pointer" mask="1" ptrtgt="S_CFDEVICE">
+      <para>device that this function belongs to.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFIRDEVICE.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:31 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFIRDEVICE" classid="408">
+    <attrib name="DeviceObject" type="S_CFDEVICE" ancestor="1" />
+  </class>
+  <!--
+ %name: S_CFJPG.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:32 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFJPG" classid="203">
+    <para>
+      The JPG structure contains information about images
+      in the JPEG format (currently only used for Cover Art
+      but can also be for buttons etc.).
+    </para>
+    <attrib name="Image" type="S_CFIMAGE" ancestor="1" />
+  </class>
+  <!--
+ %name: S_CFJUMPALIAS.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:33 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFJUMPALIAS" classid="305">
+    <para>The JumpAlias structure contains the pointer required to perform a jump action.</para>
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="cfActivity" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>Activity to jump to</para>
+    </attrib>
+    <attrib name="cfPage" type="Pointer" ptrtgt="S_CFPAGE">
+      <para>Page (within the activity) to jump to</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFKEYALIAS.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:34 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFKEYALIAS" classid="303">
+    <para>
+      The KeyAlias structure contains the pointers required to
+      perform a KeyAlias action.
+    </para>
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="cfActivity" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>Activity to jump to</para>
+    </attrib>
+    <attrib name="KeyId" type="U16">
+      <para>The ID of the key of which we need to play the actionlist</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFLABELLEDOBJECT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:34 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFLABELLEDOBJECT" classid="400">
+    <para>
+      The <classname>S_CFLABELLEDOBJECT</classname> structure
+      groups all objects that have a
+      label attached to them.
+      It extends the <classname>S_CFOBJECT</classname> structure.
+      The main reason we introduce this structure is because previously
+      many structures had a pointer to a string, but the fields were
+      called differently for every structure, making generic handling
+      of the string property quite difficult. This structure is
+      supposed to simplify this.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="cfLabel" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>the property this object incapsulates</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFLIGHTING.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:35 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFLIGHTING" classid="406">
+    <masks>
+      <mask value="2" name="ACTIONLIST" /><!-- WAS WRONG IN CFFormat.doc - MCA uses 0x2, not 0x4 --></masks>
+    <para>This structure represents a Lighting Control activity that can be controlled using the Maestro.</para>
+    <attrib name="Activity" type="S_CFACTIVITY" ancestor="1" ancestormask="0">
+      <para>It is effectively a specialization of a user device that has more properties than a normal device.</para>
+    </attrib>
+    <attrib name="cfExtender" type="Pointer" ptrtgt="S_CFEXTENDER">
+      <para>The extender to which the Lighting control device is connected</para>
+    </attrib>
+    <attrib name="PortNumber" type="U16">
+      <para>The port number of the extender</para>
+    </attrib>
+    <attrib name="unAlloc" type="U16" padding="1" />
+    <attrib name="cfSceneNames" type="Pointer" ptrtgt="S_CFSTRING" array="1">
+      <para>the names of all the scenes in this Lutron activity</para>
+    </attrib>
+    <attrib name="cfSceneNumbers" type="Pointer" ptrtgt="U16" array="1">
+      <para>
+        the numbers
+        of all the scenes that are to be shown in this Lutron activity.
+      </para>
+      <para>
+        The Scene buttons are defined in the System CF, these numbers
+        indicate which buttons need to be rendered on the screen
+      </para>
+      <note>
+        <para>
+          Both the <literal>cfSceneNames</literal> and
+          <literal>cfSceneNumbers</literal> arrays have to
+          be of the same size. The <literal>cfSceneNumbers</literal> array does not
+          contain any 0 elements, it contains the (possibly non-contiguous)
+          sequence of scenes to be drawn.
+        </para>
+        <para>
+          The <literal>cfSceneNames</literal> array contains the
+          pointers to each string for the scene at the same index in the
+          <literal>cfSceneNumbers</literal> array.
+        </para>
+        <para>
+          If a scene has no string, then an empty string will be provided
+          for it, resulting in no NULL pointers in the
+          <literal>cfSceneNames</literal> array either.
+        </para>
+      </note>
+    </attrib>
+    <attrib name="Brand" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>the brand of the lighting activity</para>
+    </attrib>
+    <attrib name="cfActionList" type="Pointer" mask="2" ptrtgt="S_CFACTIONLIST">
+      <para>the actions (macro) for this Activity.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFLISTBOX.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:36 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFLISTBOX" classid="505">
+    <para>
+      A ListBox is Visual object. This is more of a
+      meta structure for the actual items, one of which is
+      the ListBox.
+    </para>
+    <attrib name="VisualObject" type="S_CFVISUALOBJECT" ancestor="1">
+      <para>
+        The following images are not separate fields but are part of
+        the images array of the ancestor structure. They need to be in
+        the order like specified in this table
+        (ListBoxImage, BulletImage, SelectedBulletImage, ItemImage, SelectedItemImage,
+        ExpandImage, array of StatusImages)!
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <colspec colname="c1" colwidth="1*" /><colspec colname="c2" colwidth="3*" />
+          <tbody>
+            <row>
+              <entry>ListBoxImage</entry>
+              <entry>
+                <para>Pointer to image structure, used for the list box itself.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>BulletImage</entry>
+              <entry>
+                <para>
+                  Pointer to image structure, used for the bullet image in
+                  an unselected list box entry.
+                </para>
+                <para>Set to NULL if not required.</para>
+                <para>
+                  If the Listbox is subtype CheckBoxes then this is the
+                  unchecked image and it is mandatory.
+                </para>
+              </entry>
+            </row>
+            <row>
+              <entry>SelectedBulletImage</entry>
+              <entry>
+                <para>
+                  Pointer to image structure, used for the bullet image in
+                  a selected list box entry.
+                </para>
+                <para>Set to NULL if not required.</para>
+                <para>
+                  If the Listbox is subtype CheckBoxes then this is
+                  the checked image and it is mandatory.
+                </para>
+              </entry>
+            </row>
+            <row>
+              <entry>ItemImage</entry>
+              <entry>
+                <para>
+                  Pointer to image structure, used for the item
+                  background image in an unselected list box entry.
+                </para>
+                <para>Set to NULL if not required.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>SelectedItemImage</entry>
+              <entry>
+                <para>
+                  Pointer to image structure, used for the item
+                  background image in an selected list box entry.
+                </para>
+                <para>Set to NULL if not required.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>ExpandImage</entry>
+              <entry>
+                <para>
+                  Pointer to image structure, used for the expansion
+                  image icon in a list box entry.
+                </para>
+                <para>Set to NULL if not required.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>StatusImage[]</entry>
+              <entry>
+                <para>
+                  Image structure used for indicating a status of
+                  the listbox item. There can be multiple status images
+                  defined for the listbox. We use a sequence of pointers
+                  to images defined in the VisualObject images array after
+                  the ExpandImage.
+                </para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </attrib>
+    <attrib type="U8" name="Bitmask">
+      <para>Style of the listbox. This is a combination of flags.</para>
+      <para>Bit 0 of BitMask signifies that CheckBoxes per item are off (0) or on(1) i.e. enabled/disabled for the list box as a whole.</para>
+      <para>Bits 1 and 2 of BitMask signify if item selection is off (00), single line only (01) or multi-line (10) for the list box as a whole</para>
+    </attrib>
+    <attrib type="U8" name="unAlloc" padding="1" />
+    <attrib type="T_Gid" name="Gid">
+      <para>Gid of the listbox</para>
+    </attrib>
+    <attrib type="T_ColorRef" name="SelectedTextColor">
+      <para>selected item text color of the ListBox.</para>
+    </attrib>
+    <attrib type="T_ColorRef" name="SelectedBGColor">
+      <para>selected item background color of the Listbox.</para>
+    </attrib>
+    <attrib type="Pointer" name="HScrollBar" ptrtgt="S_CFSCROLLBAR">
+      <para>the scrollbar item that represents a horizontal scrollbar.</para>
+      <para>NULL if no horizontal scrollbar available.</para>
+    </attrib>
+    <attrib type="Pointer" name="VScrollBar" ptrtgt="S_CFSCROLLBAR">
+      <para>the scrollbar item that represents a vertical scrollbar.</para>
+      <para>NULL if no vertical scrollbar available.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFPAGE.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Fri Nov  7 12:17:33 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFPAGE" classid="403">
+    <masks>
+      <mask value="1" name="SCRIPT" />
+    </masks>
+    <para>
+      The Page structure contains all the data needed to build up
+      a page. A page consists of items, such as buttons, multi-buttons,
+      panels and status fields.
+    </para>
+    <attrib name="LabelledObject" type="S_CFLABELLEDOBJECT" ancestor="1" />
+    <attrib name="pageBitmask" type="U8">
+      <bitmask>
+        <bits from="0" to="3" name="SubType">
+          <para>Subtype of the page - *FIXME* specify subtypes</para>
+        </bits>
+        <bit index="4" name="Hidden">
+          <para>Indicates if this page is hidden (1) or not (0).</para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" /><attrib name="unAlloc1" type="U16" padding="1" />
+    <attrib name="cfItems" type="Pointer" ptrtgt="S_CFVISUALOBJECT" array="1">
+      <note>
+        <para>
+          <classname>S_CFVISUALOBJECT</classname> objects as such
+          should not be present in the binary CF.  Instead this array
+          should contain structures deriving
+          from <classname>S_CFVISUALOBJECT</classname>, such as
+          <classname>S_CFBUTTON</classname> and
+          <classname>S_CFPANEL</classname>.
+        </para>
+      </note>
+      <note>
+        <para>
+          There are no constraints on the number of keys and items
+          on the page. They are all contained in an
+          <classname>S_CFARRAY</classname> from
+          which the size can be retrieved.
+        </para>
+      </note>
+    </attrib>
+    <attrib name="cfFirmKeys" type="Pointer" ptrtgt="S_CFFIRMKEY" array="1">
+      <para>the actual firm keys for this page.</para>
+    </attrib>
+    <attrib name="cfScriptName" type="Pointer" mask="1" ptrtgt="S_CFSTRING">
+      <para>name of this page when used in a script.</para>
+    </attrib>
+    <attrib name="cfScript" type="Pointer" mask="1" ptrtgt="S_CFSCRIPT">
+      <para>the page script.</para>
+    </attrib>
+    <attrib name="RepeatTimerValue" type="U32" mask="1">
+      <para>
+        Value in seconds specifying the time interval between execution
+        of the attached script.
+      </para>
+      <para>0 means execute once.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFPANEL.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:38 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFPANEL" classid="507">
+    <masks>
+      <mask value="1" name="SCRIPT" />
+    </masks>
+    <para>
+      A Panel is an item. As stated before, an Item structure does not exist.
+      This is more of a meta structure for the actual items, one of which is the Panel.
+    </para>
+    <para>Panels can only contain a bitmap and a label. They do not receive user input.</para>
+    <attrib name="VisualObject" type="S_CFVISUALOBJECT" ancestor="1" />
+    <attrib name="IsTransparent" type="U8">
+      <para>
+        Indicates whether this Panel is transparent or not. To support
+        transparent text panels.
+      </para>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" />
+    <attrib name="Gid" type="T_Gid">
+      <para>Gid of the Panel</para>
+    </attrib>
+    <attrib name="cfScriptName" type="Pointer" mask="1" ptrtgt="S_CFSTRING">
+      <para>the name of this panel when used in a script.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFPNG.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:38 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFPNG" classid="202">
+    <attrib name="Image" type="S_CFIMAGE" ancestor="1" />
+    <attrib name="IsAlphaTransparent" type="U8">
+      <para>
+        Indicates if the alpha mask needs to be used to draw
+        this image transparently
+      </para>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" /><attrib name="unAlloc1" type="U16" padding="1" />
+    <attrib name="TransparencyColor" type="T_ColorRef">
+      <para>RGB value to be used on this PNG as a transparency color</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFPORT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:39 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFPORT" classid="104">
+    <para>The <classname>S_CFPORT</classname> structure abstracts the port of the extenders.</para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="PortType" type="U8">
+      <para>The kind of port.</para>
+      <enum prefix="CF_PORT">
+        <entry value="1" name="RS232" /><entry value="2" name="RELAY" /><entry value="3" name="POWERSENSE" />
+        <entry value="4" name="IR" />
+      </enum>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" />
+    <attrib name="PortNumber" type="U16">
+      <para>Numeric identifier</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFROOT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:40 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFROOT" classid="150">
+    <para>
+      The <classname>S_CFROOT</classname> structure
+      forms the entry point for the configuration
+      file (CF). This structure contains basic information about the
+      configuration and pointers to the other parts of the configuration.
+      It is an abstract structure, only
+      <classname>S_CFUSERROOT</classname> and <classname>S_CFSYSTEMROOT</classname>
+      should be instantiated (see next section).
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="Signature" type="U8" count="8">
+      <para>CF Signature used for detection of a valid CF format.</para>
+      <para>This 8 byte signature has to be: 0x50, 0x43, 0x43, 0x46, 0xff, 0xff, 0xff, 0xff.</para>
+    </attrib>
+    <attrib name="CF_Version_Minor" type="U8">
+      <para>Indicating the minor version of the CF format (Internal release) – as binary</para>
+    </attrib>
+    <attrib name="CF_Version_Major" type="U8">
+      <para>Indicating the major version of the CF format (External release) – as binary</para>
+    </attrib>
+    <attrib name="unAlloc" type="U16" padding="1" />
+    <attrib name="OemId" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>OEM Identification (<literal>PHILIPS</literal> or <literal>MARANTZ</literal>)</para>
+    </attrib>
+    <attrib name="ProductId" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>Product identification.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSCRIPT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:40 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSCRIPT" classid="107">
+    <para>
+      This structure encapsulates a string with extended length
+      to be used as a script, allowing virtually unlimited script lengths.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="Length" type="DataLenU32">
+      <para>
+        The number of bytes in the data array. UTF-8 encoding uses variable
+        byte length, so this value should not be interpreted as the number of
+        characters!
+      </para>
+      <note>
+        <para>
+          ASCII is valid UTF-8, which means the first 128 characters defined
+          in ASCII are also encoded as one byte characters in UTF-8.
+        </para>
+      </note>
+    </attrib>
+    <attrib name="cfData" type="DataPointer">
+      <para>
+        Pointer to the array of character bytes, defining the actual string.
+        It is a stream of UTF-8 bytes.
+      </para>
+      <warning>
+        <para>
+          A bug in older PEP1 versions caused binary CFs to be generated
+          with scripts using Windows codepage 1252 encoding, instead of UTF-8.
+        </para>
+        <para>
+          To compensate for this, the Maestro control panel firmware will
+          attempt to interpret scripts in binary CFs with CF format version 3.0 or earlier
+          as Windows 1252 encoding instead of UTF-8.
+        </para>
+      </warning>
+    </attrib><!--
+Note an alignment byte may need to be inserted.  NOT CORRECT
+--></class>
+  <!--
+ %name: S_CFSCROLLBAR.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:41 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSCROLLBAR" classid="503">
+    <para>
+      A ScrollBar contains the data structures required to implement
+      scrollbar functionality. It is an item that can be used in conjunction
+      with other items to provide scrolling on the object it is attached to.
+    </para>
+    <attrib name="VisualObject" type="S_CFVISUALOBJECT" ancestor="1" />
+    <attrib type="U8" name="Direction">
+      <para>Direction of the ScrollBar.</para>
+      <enum prefix="CF_SCROLLBAR">
+        <entry value="0" name="HORIZONTAL" /><entry value="1" name="VERTICAL" />
+      </enum>
+    </attrib>
+    <attrib type="U8" name="unAlloc" padding="1" />
+    <attrib type="T_Gid" name="Gid">
+      <para>Gid of the ScrollBar</para>
+    </attrib>
+    <attrib type="Pointer" name="UpLeftButton" ptrtgt="S_CFSCROLLBUTTON">
+      <para>up OR left ScrollButton.</para><para>NULL if no ScrollButton.</para>
+    </attrib>
+    <attrib type="Pointer" name="DownRightButton" ptrtgt="S_CFSCROLLBUTTON">
+      <para>down OR right ScrollButton.</para><para>NULL if no ScrollButton.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSCROLLBUTTON.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:42 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSCROLLBUTTON" classid="502">
+    <para>
+      A ScrollButton contains the data structures required
+      to implement the buttons on a scrollbar.
+    </para>
+    <attrib name="Button" type="S_CFBUTTON" ancestor="1" ancestormask="0" />
+    <attrib type="U8" name="Direction">
+      <para>Direction of the ScrollButton.</para>
+      <enum prefix="CF_SCROLL">
+        <entry value="0" name="UP" /><entry value="1" name="DOWN" /><entry value="2" name="RIGHT" />
+        <entry value="3" name="LEFT" /><entry value="4" name="CLOCKWISE">Clockwise (Used by Scroll Wheel),</entry>
+        <entry value="5" name="ANTICLOCKWISE">Anti-Clockwise (Used by Scroll Wheel)</entry>
+      </enum>
+    </attrib>
+    <attrib type="U8" name="ScrollStyle">
+      <para>Style of scrolling.</para>
+      <enum>
+        <entry value="0">Line scroll</entry><entry value="1">Page scroll</entry>
+      </enum>
+    </attrib>
+    <attrib type="U16" name="unAlloc" padding="1" />
+  </class>
+  <!--
+ %name: S_CFSERIALCOMMAND.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Fri Nov  7 12:17:42 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSERIALCOMMAND" classid="354">
+    <masks>
+      <mask value="1" name="DEVICE" /><mask value="2" name="WHILEPRESSED" />
+    </masks>
+    <para>
+      Represents an RS232 command to be sent to an extender.
+      Serial port settings are sent along with every statement.
+    </para>
+    <attrib name="Statement" type="S_CFSTATEMENT" ancestor="1" />
+    <attrib type="U8" name="Speed">
+      <para>Speed of the data communication on the serial port in bits per second.</para>
+      <enum prefix="SERIAL_SPEED">
+        <entry value="0" name="300BPS" /><entry value="1" name="1200BPS" /><entry value="2" name="2400BPS" />
+        <entry value="3" name="4800BPS" /><entry value="4" name="9600BPS" /><entry value="5" name="14400BPS" />
+        <entry value="6" name="19200BPS" /><entry value="7" name="28800BPS" /><entry value="8" name="31250BPS" />
+        <entry value="9" name="38400BPS" /><entry value="10" name="57600BPS" /><entry value="10" name="115200BPS" />
+        <entry value="15" name="USECURRENT">Use Current Settings</entry>
+      </enum>
+    </attrib>
+    <attrib type="U8" name="DataBits">
+      <para>Number of data bits to be used in the communication.</para>
+      <enum prefix="SERIAL_DATABITS">
+        <entry value="0" name="5">5 data bits</entry><entry value="1" name="6">6 data bits</entry>
+        <entry value="2" name="7">7 data bits</entry><entry value="3" name="8">8 data bits</entry>
+      </enum>
+    </attrib>
+    <attrib type="U8" name="Parity">
+      <para>Parity check.</para>
+      <enum prefix="SERIAL_PARITY">
+        <entry value="0" name="NONE" /><entry value="1" name="EVEN" /><entry value="2" name="ODD" />
+        <entry value="3" name="MARK" /><entry value="4" name="SPACE" />
+      </enum>
+    </attrib>
+    <attrib type="U8" name="StopBits">
+      <para>Number of stopbits.</para>
+      <enum prefix="SERIAL_STOPBITS">
+        <entry value="0" name="1">1 stop bit</entry><entry value="1" name="15">1.5 stop bits</entry>
+        <entry value="2" name="2">2 stop bits</entry>
+      </enum>
+    </attrib>
+    <attrib type="U8" name="SerialStatementType">
+      <para>Type of serial command.</para>
+      <enum prefix="SERIAL">
+        <entry value="0" name="SEND" /><entry value="1" name="READ" /><entry value="2" name="MATCH" />
+        <entry value="3" name="TWOWAY" />
+      </enum>
+    </attrib>
+    <attrib type="U8" name="PaddingByte" padding="1" />
+    <attrib type="U16" name="Length">
+      <para>Amount of data to read</para>
+    </attrib>
+    <attrib type="U32" name="Expire">
+      <para>unused</para>
+    </attrib>
+    <attrib type="U32" name="Ttl">
+      <para>Time in milliseconds to continue repeating the serial command</para>
+    </attrib>
+    <attrib type="U16" name="Delay">
+      <para>Time between two possible consecutive repetitions of the specified serial command</para>
+    </attrib>
+    <attrib type="DataLenU16" name="DataSize">
+      <para>Number of bytes pointed to by cfData</para>
+    </attrib>
+    <attrib type="U32" name="TimeOut">
+      <para>Time in milliseconds after which to stop reading data</para>
+    </attrib>
+    <attrib type="U32" name="Count">
+      <para>Number of times to send the serial command (1 = send once)</para>
+    </attrib>
+    <attrib type="DataPointer" name="cfData">
+      <para>Pointer to the character data</para>
+    </attrib>
+    <attrib type="Pointer" name="cfDevice" mask="1" ptrtgt="S_CFDEVICE">
+      <para>the device that this function belongs to.</para>
+    </attrib>
+    <attrib type="U8" name="serialCommandBitmask" mask="2">
+      <bitmask>
+        <bit index="0" name="WhilePressed">
+          <para>
+            Defines if action can be played
+            while pressed or always as single shot.
+          </para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib type="U8" name="unAlloc" padding="1" mask="2" /><attrib type="U16" name="unAlloc1" padding="1" mask="2" />
+  </class>
+  <!--
+ %name: S_CFSERIALDEVICE.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:43 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSERIALDEVICE" classid="407">
+    <attrib name="DeviceObject" type="S_CFDEVICE" ancestor="1" />
+  </class>
+  <!--
+ %name: S_CFSETTINGS.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Tue Mar  3 17:32:35 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSETTINGS" classid="102">
+    <masks>
+      <mask value="1" name="DNS" /><mask value="2" name="ETHERNET_CONFIG" since="3.2" />
+      <mask value="4" name="WIFI_TUNING" since="3.2" />
+    </masks>
+    <para>
+      The Settings structure contains the settings for the Maestro
+      configuration file.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="HeaderInfo" type="U16">
+      <para>
+        This variable is controlled by the application to detect
+        valid settings.
+      </para>
+    </attrib>
+    <attrib name="LCDTimeOut" type="U8">
+      <para>Timeout of the LCD, in seconds.</para>
+    </attrib>
+    <attrib name="LCDBacklightBrightness" type="U8">
+      <para>Value of the LCD brightness, in percentage.</para>
+    </attrib>
+    <attrib name="KeyBacklightTimeOut" type="U8">
+      <para>Timeout of the key backlight, in seconds..</para>
+    </attrib>
+    <attrib name="KeyBacklightBrightness" type="U8">
+      <para>Value of the key brightness, in percentage.</para>
+    </attrib>
+    <attrib name="GeneralVolume" type="U8">
+      <para>
+        Volume for the display related sounds: touch screen sounds,
+        jog dial, sounds in actionlists. In percentage.
+      </para>
+    </attrib>
+    <attrib name="KeyVolume" type="U8">
+      <para>
+        Volume of all the hard keys (including the firm keys).
+        In percentage.
+      </para>
+    </attrib>
+    <attrib name="TimeFormat" type="U8">
+      <para>Format to be used when displaying the time.</para>
+      <enum prefix="TIMEFORMAT">
+        <entry value="0" name="NOTIME" /><entry value="1" name="AMPM" /><entry value="2" name="24H" />
+        <!--
+      <entry value="3" name="DAY"/>
+--></enum>
+      <note>
+        <para>
+          DateFormat is not used anymore, only one format was
+          supported: <literal>DATEFORMAT_DDMMYYYY</literal>
+        </para>
+      </note>
+    </attrib>
+    <attrib name="TimeZone" type="U8">
+      <para>Index into the time zone enum.</para>
+      <para>
+        Because of the complex nature of time zone rules (this involves:
+        time offset from UTC, varying rules on the exact moment of transition
+        to and from daylight savings time, ..), the firmware in the Maestro
+        control panel uses the Olson Database, and refers to
+        timezones
+        using IDs in the form of
+        <replaceable>Area</replaceable>/<replaceable>Location</replaceable>.
+      </para>
+      <enum>
+        <entry value="0">UTC</entry><entry value="1">Pacific/Kwajalein</entry><entry value="2">Pacific/Samoa</entry>
+        <entry value="3">Pacific/Honolulu</entry><entry value="4">America/Anchorage</entry>
+        <entry value="5">America/Tijuana</entry><entry value="6">America/Edmonton</entry>
+        <entry value="7">America/Chihuahua</entry><entry value="8">America/Phoenix</entry>
+        <entry value="9">America/Chicago</entry><entry value="10">America/Regina</entry>
+        <entry value="11">America/Mexico_City</entry><entry value="12">America/Chicago</entry>
+        <entry value="13">America/New_York</entry><entry value="14">America/Indiana/Indianapolis</entry>
+        <entry value="15">America/Bogota</entry><entry value="16">Atlantic/Bermuda</entry>
+        <entry value="17">America/Caracas</entry><entry value="18">America/Santiago</entry>
+        <entry value="19">America/St_Johns</entry><entry value="20">America/Sao_Paulo</entry>
+        <entry value="21">America/Buenos_Aires</entry><entry value="22">America/Godthab</entry>
+        <entry value="23">Atlantic/South_Georgia</entry><entry value="24">Atlantic/Azores</entry>
+        <entry value="25">Atlantic/Cape_Verde</entry><entry value="26">Europe/London</entry>
+        <entry value="27">Africa/Casablanca</entry><entry value="28">Europe/Prague</entry>
+        <entry value="29">Europe/Warsaw</entry><entry value="30">Europe/Paris</entry>
+        <entry value="31">Europe/Berlin</entry><entry value="32">Africa/Niamey</entry>
+        <entry value="33">Europe/Bucharest</entry><entry value="34">Africa/Cairo</entry>
+        <entry value="35">Europe/Helsinki</entry><entry value="36">Europe/Athens</entry>
+        <entry value="37">Asia/Jerusalem</entry><entry value="38">Africa/Johannesburg</entry>
+        <entry value="39">Europe/Moscow</entry><entry value="40">Asia/Riyadh</entry>
+        <entry value="41">Africa/Nairobi</entry><entry value="42">Asia/Baghdad</entry>
+        <entry value="43">Asia/Tehran</entry><entry value="44">Asia/Muscat</entry><entry value="45">Asia/Baku</entry>
+        <entry value="46">Asia/Kabul</entry><entry value="47">Asia/Yekaterinburg</entry>
+        <entry value="48">Asia/Karachi</entry><entry value="49">Asia/Calcutta</entry>
+        <entry value="50">Asia/Katmandu</entry><entry value="51">Asia/Dhaka</entry>
+        <entry value="52">Asia/Colombo</entry><entry value="53">Asia/Almaty</entry>
+        <entry value="54">Asia/Rangoon</entry><entry value="55">Asia/Bangkok</entry>
+        <entry value="56">Asia/Krasnoyarsk</entry><entry value="57">Asia/Taipei</entry>
+        <entry value="58">Australia/Perth</entry><entry value="59">Asia/Ulaanbaatar</entry>
+        <entry value="60">Asia/Seoul</entry><entry value="61">Asia/Tokyo</entry><entry value="62">Asia/Yakutsk</entry>
+        <entry value="63">Australia/Darwin</entry><entry value="64">Australia/Adelaide</entry>
+        <entry value="65">Australia/Sydney</entry><entry value="66">Australia/Brisbane</entry>
+        <entry value="67">Australia/Hobart</entry><entry value="68">Asia/Vladivostok</entry>
+        <entry value="69">Pacific/Guam</entry><entry value="70">Asia/Magadan</entry>
+        <entry value="71">Pacific/Fiji</entry><entry value="72">Pacific/Auckland</entry>
+        <entry value="73">Pacific/Tongatapu</entry>
+      </enum>
+    </attrib>
+    <attrib name="DayLightSavingTime" type="U8">
+      <para>
+        Indicates whether we want to enable or disable the daylight
+        savings time feature, that adjusts the time according to the time
+        zone that was set in the TimeZone field.
+      </para>
+    </attrib>
+    <attrib name="TiltSensorMode" type="U8">
+      <para>Indicates whether the tilt sensor is on of off.</para>
+    </attrib>
+    <attrib name="AnimationMode" type="U8">
+      <para>
+        Specifies the animation mode, the kind of page transitions the
+        Maestro device performs when switching between activities or pages.
+      </para>
+      <enum prefix="ANIMATIONMODE">
+        <entry value="0" name="FULL" /><entry value="1" name="PAGEONLY" /><entry value="2" name="ACTIVITIESONLY" />
+        <entry value="3" name="NONE" />
+      </enum>
+    </attrib>
+    <attrib name="CurrentLanguageIndex" type="U8">
+      <para>Index of the current language.</para>
+      <enum prefix="LANGUAGE">
+        <entry value="0" name="ENGLISH" /><entry value="1" name="GERMAN" /><entry value="2" name="FRENCH" />
+        <entry value="3" name="DUTCH" /><entry value="4" name="SPANISH" />
+      </enum>
+    </attrib>
+    <attrib name="FirmKeysBehaviour" type="U8">
+      <para>
+        Indicates what should be the effect of the first press on a firmkey
+        when the device is asleep.
+      </para>
+      <enum prefix="ACTIVATIONRULE">
+        <entry value="0" name="TURNDISPLAYONONLY" /><entry value="1" name="SENDIRONLY" />
+        <entry value="2" name="TURNDISPLAYONANDSENDIR" /><entry value="3" name="IGNOREKEY" />
+      </enum>
+    </attrib>
+    <attrib name="CursorKeysBehaviour" type="U8">
+      <para>
+        Indicates what should be the effect of the first press on a
+        cursor key when the device is asleep. See FirmKeysBehaviour for the
+        possible values.
+      </para>
+    </attrib>
+    <attrib name="UserAreaTop" type="T_Position">
+      <para>
+        The user can choose in the editor which part of the
+        screen must be scrolled when navigating in use mode. This field indicates
+        the top x and y coordinates of the scrollable area.
+      </para>
+    </attrib>
+    <attrib name="UserAreaBottom" type="T_Position">
+      <para>
+        The user can choose in the editor which part of the
+        screen must be scrolled when navigating in use mode. This field indicates
+        the bottom x and y coordinates of the scrollable area.
+      </para>
+    </attrib>
+    <attrib name="WiFiNetworkConfig" type="S_CFWIFI">
+      <para>
+        Contained S_CFWIFI structure, defining all the properties of the
+        wireless network, split up in a number of structures.
+      </para>
+    </attrib>
+    <attrib name="WiFiTimeOut" type="U32">
+      <para>Timeout for the WiFi connection, in minutes. If value is 0 then WiFi is disabled.</para>
+    </attrib>
+    <attrib name="ProjectName" type="Pointer" ptrtgt="S_CFSTRING">
+      <para>The name of the Project</para>
+    </attrib>
+    <attrib name="WiFiNetworkConfig_dns" type="U8" count="16" mask="1">
+      <para>Character array specifying the dns properties in dotted notation.</para>
+    </attrib>
+    <attrib name="EthernetConfig" type="Pointer" mask="2" ptrtgt="S_CFETHERNETCONFIG">
+      <para>
+        Definition of the network settings
+        to apply to the Ethernet interface, in case it is available.
+      </para>
+      <para>
+        WiFi and Ethernet are, for now, mutually exclusive so they should not be
+        enabled in the CF at the same time.
+      </para>
+      <para>
+        If extension bit is
+        not set (older CF version) then Ethernet is disabled (not used).
+      </para>
+      <para>
+        Older firmware versions that do not support this extension will always use
+        the WiFi settings.
+      </para>
+    </attrib>
+    <attrib name="WiFiTuning" type="Pointer" mask="4" ptrtgt="S_CFWIFITUNING">
+      <para>
+        Definition of the WiFi tuning settings settings
+        to apply to the WiFi interface, in case it is available.
+      </para>
+      <para>
+        If extension bit is
+        not set (older CF version) then generic settings are used.
+      </para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSLIDERBAR.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:45 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSLIDERBAR" classid="504">
+    <para>
+      A SliderBar is an item that allows the setting of a
+      value by using a sliding bar a user can control. It also
+      allows the displaying of an indication bar on the
+      background, allowing a user to associate a setting with
+      a relevant measurement.
+    </para>
+    <attrib name="VisualObject" type="S_CFVISUALOBJECT" ancestor="1">
+      <para>
+        The images in the VisualObject structure need to be
+        in the order like specified in the following table:
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <colspec colname="c1" colwidth="1*" /><colspec colname="c2" colwidth="3*" />
+          <tbody>
+            <row>
+              <entry>BackgroundImage</entry>
+              <entry>
+                <para>
+                  The background image for a single unit.
+                  An indicator shall be created by placing
+                  TotalUnits of this image side by side separated with
+                  a margin of 1 pixel.
+                </para>
+                <para>
+                  A border shall be drawn around the
+                  slider bar with 1-pixel margin. The thickness of the
+                  border shall be 2-pixels.
+                </para>
+                <para>
+                  The right margin (or left margin if text is on the right)
+                  between the soft button
+                  border and slider borderline shall be 8-pixels.
+                </para>
+                <para>Top and bottom margins shall be 4-pixels.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>IndicatorImage</entry>
+              <entry>
+                <para>
+                  The foreground image for a single unit. Depending on
+                  a measurement value this image shall replace the background
+                  image starting from the left hand side.
+                </para>
+                <para>Must be set to NULL if no indicator bar is required.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>MiddleSliderImage</entry>
+              <entry>
+                <para>
+                  Slider image in the middle section. When a setting is
+                  required that is in the middle of the slider, this image
+                  shall be used to indicate that value.
+                </para>
+                <para>Must be set to NULL if no indicator bar is required.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>LeftSliderImage</entry>
+              <entry>
+                <para>
+                  Slider image in the leftmost section. When the slider
+                  setting is at the leftmost column, this image a setting is
+                  required that is in the middle of the slider, this image
+                  shall be used.
+                </para>
+                <para>Must be set to NULL if no indicator bar is required.</para>
+              </entry>
+            </row>
+            <row>
+              <entry>RightSliderImage</entry>
+              <entry>
+                <para>
+                  Slider image in the leftmost section. When the slider
+                  setting is at the leftmost column, this image a setting is
+                  required that is in the middle of the slider, this image
+                  shall be used.
+                </para>
+                <para>Must be set to NULL if no indicator bar is required.</para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </attrib>
+    <attrib type="Pointer" name="softButton" ptrtgt="S_CFBUTTON">
+      <para>
+        Defines a soft button item on which the slider bar is
+        placed. Slider bar placement depends on the text alignment
+        on the soft button. It will be placed opposite to the soft
+        button text. If soft button text is centered it will be
+        placed on the right hand side of the button.
+      </para>
+    </attrib>
+    <attrib type="U8" name="TotalIndications">
+      <para>
+        Total number of units to be placed on the slider bar.
+        This number also determines the size of the slider bar
+        together with BackgroundImage width, the Gap_size and
+        the Line thickness. A measurement value to be displayed
+        on the slider bar shall be scaled to this value.
+      </para>
+    </attrib>
+    <attrib type="U8" name="TotalSliders">
+      <para>
+        Total resolution of settings on the slider bar. Slider
+        bar movement steps to left or right is based on this value.
+        A setting value entered on the slider bar shall be scaled to
+        this value.
+      </para>
+    </attrib>
+    <attrib type="S16" name="Adjustment">
+      <para>
+        The slider bar is automatically adjusted to the vertical
+        center of the button if the slider bar text is on the side of
+        the slider bar or adjusted to the horizontal center if the
+        slider bar text is on above or below the slider bar;
+        this attribute represents the positive or negative deviation in pixels
+        of the slider bar from the center of the button.
+      </para>
+      <para>This field is thus a signed value!</para>
+    </attrib>
+    <attrib type="T_ColorRef" name="BorderColor">
+      <para>Color of the border of the slider bar.</para>
+    </attrib>
+    <attrib type="U8" name="Direction">
+      <para>Direction of the slider bar.</para>
+      <enum prefix="CF_SLIDERBAR_DIR">
+        <entry value="0">Reserved</entry><entry value="1" name="LEFTTORIGHT">Left to Right</entry>
+        <entry value="2" name="RIGHTTOLEFT">Right to Left</entry>
+        <entry value="3" name="TOPTOBOTTOM">Top to Bottom (for future use)</entry>
+        <entry value="4" name="BOTTOMTOTOP">Bottom to Top (for future use)</entry>
+      </enum>
+    </attrib>
+    <attrib type="S8" name="GapSize">
+      <para>The size in pixels between each slider bitmap.</para>
+      <para>
+        This value is a signed value: the images can be overlapping,
+        i.e. to create a smoother shading effect using alpha blended PNGs.
+      </para>
+    </attrib>
+    <attrib type="U8" name="LineThickness">
+      <para>The thickness in pixels of line around the slider bar.</para>
+    </attrib>
+    <attrib type="U8" name="Margin">
+      <para>The distance in pixels from the edge of the button.</para>
+      <para>
+        If the slider bar is on the right side of the button than
+        this value represents the right edge. If it is on the left side
+        than it represents the left. If it is on top than it represents
+        the top margin. And if it is on the bottom then it represents
+        the bottom margin.
+      </para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSOUNDACTION.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:46 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSOUNDACTION" classid="307">
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="Sound" type="Pointer" ptrtgt="S_CFSOUND">
+      <para>Sound to play.</para>
+    </attrib>
+    <attrib name="Duration" type="U32">
+      <para>Duration of the sound action action, in milliseconds.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSOUND.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:45 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSOUND" classid="103">
+    <para>This structure represents Wave file data</para><attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="Size" type="DataLenU32">
+      <para>The size of the sound data in bytes</para>
+    </attrib>
+    <attrib name="cfData" type="DataPointer"><!-- dataPtr -->
+      <para>Pointer to the wave file data located somewhere else in the CF</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSPECIALACTION.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:47 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSPECIALACTION" classid="304">
+    <para>
+      This structure encapsulates a GID that is specifying a
+      special action like browse forward, go to home, page up etc.
+      into an action.
+    </para>
+    <attrib name="Action" type="S_CFACTION" ancestor="1" />
+    <attrib name="SpecialAction" type="U16">
+      <para>The special action this action encapsulates</para>
+    </attrib>
+    <attrib name="unAlloc" type="U16" padding="1" />
+  </class>
+  <!--
+ %name: S_CFSTATEMENT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:47 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSTATEMENT">
+    <para>
+      This structure represents a statement as
+      defined by the NHC protocol. It is subclassed
+      to instantiate statements that can be interpreted
+      by an extender.
+    </para>
+    <attrib name="Function" type="S_CFFUNCTION" ancestor="1" />
+  </class>
+  <!--
+ %name: S_CFSTATUSFIELD.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:48 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSTATUSFIELD" classid="508">
+    <para>
+      A status field can be used to display the
+      status of a list of objects in the system.
+      See Subtype for details.
+    </para>
+    <attrib name="VisualObject" type="S_CFVISUALOBJECT" ancestor="1" />
+    <attrib name="SubType" type="U16">
+      <para>Subtype of the StatusField. See below.</para>
+      <table>
+        <title>S_CFSTATUSFIELD.SubType fields</title>
+        <tgroup cols="3">
+          <colspec colname="c1" colwidth="2*" /><colspec colname="c2" colwidth="1*" />
+          <colspec colname="c2" colwidth="5*" />
+          <thead>
+            <row>
+              <entry>Subtype</entry><entry>Value</entry><entry>Explanation</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>Time</entry><entry>0x0001</entry>
+              <entry>
+                <para>Displays time (i.e. 10:52pm)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>Date</entry><entry>0x0002</entry>
+              <entry>
+                <para>Displays date (i.e. Mon Jan 01)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>PageNr</entry><entry>0x0003</entry>
+              <entry>
+                <para>Displays current page number</para>
+              </entry>
+            </row>
+            <row>
+              <entry>NrOfPages</entry><entry>0x0004</entry>
+              <entry>
+                <para>Displays total number of pages of current device (Module)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>IRWidget</entry><entry>0x0005</entry>
+              <entry>
+                <para>Displays a bitmap when sending an IR-code</para>
+              </entry>
+            </row>
+            <row>
+              <entry>BatteryLow</entry><entry>0x0006</entry>
+              <entry>
+                <para>Displays a bitmap when battery is on low Voltage</para>
+              </entry>
+            </row>
+            <row>
+              <entry>BatteryLevel</entry><entry>0x0007</entry>
+              <entry>
+                <para>Displays the battery level</para>
+              </entry>
+            </row>
+            <row>
+              <entry>WiFiLevel</entry><entry>0x0008</entry>
+              <entry>
+                <para>Displays the WiFi network signal strength levelstatus</para><para>Possible values are:</para>
+                <para>0 = Wifi level 4</para><para>1 = Wifi level 3</para><para>2 = Wifi level 2</para>
+                <para>3 = Wifi level 1</para><para>4 = Wifi no connection</para><para>5 = Wifi fault connection</para>
+                <para>6 = Wifi level adhoc</para><para>7 = No network configured</para><para>8 = Ethernet ok</para>
+                <para>9 = Ethernet broken</para><para>10 = Ethernet unknown</para>
+              </entry>
+            </row>
+            <row>
+              <entry>USB</entry><entry>0x0009</entry>
+              <entry>
+                <para>Displays the USB connection status</para>
+              </entry>
+            </row>
+            <row>
+              <entry>OnOff</entry><entry>0x000A</entry>
+              <entry>
+                <para>Displays an on or off state</para>
+              </entry>
+            </row>
+            <row>
+              <entry>LutronOnOff</entry><entry>0x000B</entry>
+              <entry>
+                <para>Displays an on or off state (specific for Lutron)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>LCDTimeOut</entry><entry>0x0010</entry>
+              <entry>
+                <para>Displays the LCD TimeOut value</para>
+              </entry>
+            </row>
+            <row>
+              <entry>PageNr_NrOfPages</entry><entry>0x0013</entry>
+              <entry>
+                <para>Displays the a page number and the number of pages</para>
+              </entry>
+            </row>
+            <row>
+              <entry>ActivityName</entry><entry>0x0014</entry>
+              <entry>
+                <para>Displays the name of the current activity</para>
+              </entry>
+            </row>
+            <row>
+              <entry>BacklightTimeout</entry><entry>0x0015</entry>
+              <entry>
+                <para>Displays the backlight timeout (both LCD and buttons)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>BeepVolume</entry><entry>0x0016</entry>
+              <entry>
+                <para>Displays the bitmap of the volume (no sound -&gt; ... -&gt; loud)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>Day</entry><entry>0x0017</entry>
+              <entry>
+                <para>Displays the day of the date (i.e. 01)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>Month</entry><entry>0x0018</entry>
+              <entry>
+                <para>Displays the month of the date (i.e. Jan)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>Year</entry><entry>0x0019</entry>
+              <entry>
+                <para>Displays the year of the date (i.e. 2005)</para>
+              </entry>
+            </row>
+            <row>
+              <entry>Message</entry><entry>0x001B</entry>
+              <entry>
+                <para>Displays an edit box where text can be entered</para>
+              </entry>
+            </row>
+            <row>
+              <entry>ActionStatus</entry><entry>0x001D</entry>
+              <entry>
+                <para>Displays the current playing action</para>
+              </entry>
+            </row>
+            <row>
+              <entry>PageName</entry><entry>0x001F</entry>
+              <entry>
+                <para>Displays the name of the page</para>
+              </entry>
+            </row>
+            <row>
+              <entry>FreeMemory</entry><entry>0x0021</entry>
+              <entry>
+                <para>Displays the free memory status</para>
+              </entry>
+            </row>
+            <row>
+              <entry>LCDContrast</entry><entry>0x0022</entry>
+              <entry>
+                <para>Displays the contrast of the LCD screen</para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </attrib>
+    <attrib name="Gid" type="T_Gid">
+      <para>GID of the StatusField</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSTRING.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:49 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSTRING" classid="100">
+    <para>The String structure contains string information for labels etc.</para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="Size" type="DataLenU16">
+      <para>
+        The number of bytes in the data array. UTF-8 encoding uses variable
+        byte length, so this value should not be interpreted as the number of
+        characters!
+      </para>
+      <note>
+        <para>
+          ASCII is valid UTF-8, which means the first 128 characters defined
+          in ASCII are also encoded as one byte characters in UTF-8.
+        </para>
+      </note>
+    </attrib>
+    <attrib name="unAlloc" type="U16" padding="1" />
+    <attrib name="cfData" type="DataPointer">
+      <para>
+        Pointer to the array of character bytes, defining the actual string.
+        It is a stream of UTF-8 bytes.
+      </para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFSYSTEMROOT.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:50 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFSYSTEMROOT" classid="152">
+    <attrib name="Root" type="S_CFROOT" ancestor="1" />
+    <attrib name="cfSystemPageActivities" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>The activity with system pages.</para>
+      <para>These pages have predefined values, see System Configuration section.</para>
+    </attrib>
+    <attrib name="cfSystemAreaActivities" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>The activity with system areas.</para>
+      <para>These pages have predefined values, see System Configuration section.</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFUSERROOT.xml %
+ %created_by: ycl %
+ %version: 4 %
+ %date_created: Mon Mar 16 16:26:24 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008, 2009 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFUSERROOT" classid="151">
+    <masks>
+      <mask value="1" name="FONTS" since="3.1" /><mask value="2" name="SCRIPTLIBS" since="3.2" />
+    </masks>
+    <attrib name="Root" type="S_CFROOT" ancestor="1" />
+    <attrib name="cfHomeActivity" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>Home Activity</para>
+    </attrib>
+    <attrib name="cfSystemActivity" type="Pointer" ptrtgt="S_CFACTIVITY">
+      <para>System Activity</para>
+    </attrib>
+    <attrib name="cfActivities" type="Pointer" ptrtgt="S_CFACTIVITY" array="1">
+      <para>All activities in the configuration</para>
+    </attrib>
+    <attrib name="cfExtenders" type="Pointer" ptrtgt="S_CFEXTENDER" array="1">
+      <para>All extenders in the configuration</para>
+    </attrib>
+    <attrib name="cfDevices" type="Pointer" ptrtgt="S_CFDEVICE" array="1">
+      <para>All devices in the configuration</para>
+    </attrib>
+    <attrib name="cfSettings" type="Pointer" ptrtgt="S_CFSETTINGS">
+      <para>Settings of the configuration</para>
+    </attrib>
+    <attrib name="cfFonts" type="Pointer" mask="1" ptrtgt="S_CFFILE" array="1">
+      <para>
+        This is provided so that fonts can be loaded after CF
+        download if required and not at display time.
+      </para>
+    </attrib>
+    <attrib name="cfScriptLibraries" type="Pointer" mask="2" ptrtgt="S_CFFILE" array="1">
+      <para>Script libraries available in the user CF.</para>
+      <para>
+        The files referenced in the array are expected to have a file type
+        of 0x0101 (unencrypted JavaScript) or 0x0102 (encrypted JavaScript).
+      </para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFVISUALOBJECT.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Fri Nov  7 12:17:53 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFVISUALOBJECT" classid="500">
+    <masks>
+      <mask value="1" name="BOLDITALIC" />
+    </masks>
+    <para>
+      The <classname>S_CFVISUALOBJECT</classname> generalizes all objects that can be
+      drawn on the GUI.
+      It extends the <classname>S_CFLABELLEDOBJECT</classname> structure.
+      All
+      visual objects thus also have a label associated to them
+      and group all common properties.
+    </para>
+    <attrib name="LabelledObject" type="S_CFLABELLEDOBJECT" ancestor="1" />
+    <attrib name="cfFont" type="Pointer" ptrtgt="S_CFFONT">
+      <para>font used for the text on this visual object.</para>
+    </attrib>
+    <attrib name="TextColor" type="T_ColorRef">
+      <para>text color of the visual object</para>
+    </attrib>
+    <attrib name="TextBGColor" type="T_ColorRef">
+      <para>background color of the visual object</para>
+    </attrib>
+    <attrib name="Position" type="T_Position">
+      <para>position of this visual object</para>
+    </attrib>
+    <attrib name="Dimension" type="T_Dimension">
+      <para>dimension of this visual object</para>
+    </attrib>
+    <attrib name="cfImages" type="Pointer" ptrtgt="S_CFIMAGE" array="1">
+      <para>Images associated with the visual object.</para>
+    </attrib>
+    <attrib name="visualBitmask" type="U8">
+      <bitmask>
+        <bit index="0" name="Hidden">
+          <para>Specifies if this object must be drawn or not</para>
+        </bit>
+        <bits from="1" to="2" name="HTextAlignment">
+          <para>Horizontal alignment of the text on this visual object.</para>
+          <enum prefix="CF_HTEXTALIGN">
+            <entry value="0" name="CENTER" /><entry value="1" name="LEFT" /><entry value="2" name="RIGHT" />
+          </enum>
+        </bits>
+        <bits from="3" to="4" name="VTextAlignment">
+          <para>Vertical alignment of the text on this visual object.</para>
+          <enum prefix="CF_VTEXTALIGN">
+            <entry value="0" name="CENTER" /><entry value="1" name="UP" /><entry value="2" name="DOWN" />
+          </enum>
+        </bits>
+        <bit index="5" name="TextBold" mask="1"><!-- BOLDITALIC -->
+          <para>Specifies if text should be displayed in Bold.</para>
+        </bit>
+        <bit index="6" name="TextItalic" mask="1">
+          <para>Specifies if text should be displayed in Italic.</para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib name="unAlloc" type="U8" padding="1" /><attrib name="unAlloc1" type="U16" padding="1" />
+  </class>
+  <!--
+ %name: S_CFWIFI.xml %
+ %created_by: ycl %
+ %version: 1 %
+ %date_created: Fri Sep 26 14:41:52 2008 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFWIFI">
+    <para>
+      This structure defines the properties for Wireless
+      IP networking, on top of the regular IP networking
+      properties defined in the configuration structures.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1">
+      <para>
+        Since this structure has been used as a
+        contained structure it can’t be extended
+        and no type has been assigned to it.
+      </para>
+    </attrib>
+    <attrib name="essid" type="U8" count="33">
+      <para>
+        Sequence of ASCII characters specifying the name of
+        the wireless network.
+      </para>
+      <para>A maximum of 33 bytes are supported (defined as ESSID_MAX_SIZE).</para>
+    </attrib>
+    <attrib name="channel" type="U8">
+      <para>Number from 0 to 15</para>
+    </attrib>
+    <attrib name="dhcp" type="U8">
+      <para>Indicates whether DHCP is enabled of not</para>
+    </attrib>
+    <attrib name="mode" type="U8">
+      <para>The operation mode of the wireless network.</para>
+      <enum>
+        <entry value="0" name="AD_HOC" /><entry value="1" name="MANAGED" />
+      </enum>
+    </attrib>
+    <attrib name="encryption" type="U8">
+      <para>Encryption format of the date traffic on the wireless network.</para>
+      <enum prefix="WIFI_ENCRYPT">
+        <entry value="0" name="OFF" /><entry value="1" name="WEP40" /><entry value="2" name="WEP104" />
+        <entry value="3" name="WPA" /><!-- WARNING: Old document specified '4' here --></enum>
+    </attrib>
+    <attrib name="encryptionKeyType" type="U8">
+      <para>
+        Type of encryption on the wireless network. Indicates which field of
+        this structure has to be used.
+      </para>
+      <enum prefix="WIFI_KEY">
+        <entry value="0" name="NONE" /><entry value="1" name="PASSKEY" /><entry value="2" name="PASSPHRASE" />
+      </enum>
+    </attrib>
+    <attrib name="padding" type="U16" padding="1" />
+    <attrib name="passkey" type="U8" count="64">
+      <para>Sequence of ASCII characters specifying the pass key for the wireless network.</para>
+      <para>A maximum of 64 bytes are supported (defined as PASSKEY_MAX_SIZE).</para>
+    </attrib>
+    <attrib name="passphrase" type="U8" count="64">
+      <para>Sequence of ASCII characters specifying the pass phrase for the wireless network.</para>
+      <para>A maximum of 64 bytes are supported (defined as PASSPHRASE_MAX_SIZE).</para>
+    </attrib>
+    <attrib name="ip_config" type="S_CFIP_CONF">
+      <para>Contained <classname>S_CFIP_CONF</classname> structure</para>
+    </attrib>
+  </class>
+  <!--
+ %name: S_CFWIFITUNING.xml %
+ %created_by: ycl %
+ %version: 2 %
+ %date_created: Wed Mar  4 09:36:28 2009 %
+=============================================================================
+    (C) COPYRIGHT 2008 Home Control (LEUVEN)
+    ALL RIGHTS RESERVED. COMPANY CONFIDENTIAL.
+=============================================================================
+-->
+  <class name="S_CFWIFITUNING" classid="111" since="3.2">
+    <para>
+      This structure defines the WiFi tuning properties
+      to be used when a WiFi interface is available
+    </para>
+    <para>
+      It contains settings which ought to be part of the
+      <xref linkend="class.S_CFWIFI" /> structure, but the
+      <xref linkend="class.S_CFWIFI" /> structure is contained
+      in the <xref linkend="class.S_CFSETTINGS" /> structure, and can not
+      be changed anymore for backwards compatibility with older
+      firmware. From now on any new refining of WiFi settings
+      should be done by extending <classname>S_CFWIFITUNING</classname>.
+    </para>
+    <attrib name="Object" type="S_CFOBJECT" ancestor="1" />
+    <attrib name="interfaceIndex" type="U8">
+      <para>Number from 0 to 255. Default is 0.</para>
+    </attrib>
+    <attrib name="wifiBitmask" type="U8">
+      <bitmask>
+        <bit index="0" name="Enabled">
+          <para>
+            indicates if the WiFi interface is enabled (1) or
+            disabled (0).
+          </para>
+        </bit>
+      </bitmask>
+    </attrib>
+    <attrib name="scanTime" type="U16">
+      <para>
+        Number of milliseconds to wait for scan results
+        on every channel.
+      </para>
+      <para>A value of 100 is the default behaviour.</para>
+    </attrib>
+    <attrib name="channelMask" type="U32">
+      <para>
+        Bitmask to restrict the number of channels to scan
+        for access points.  If a bit is set, the corresponding
+        WiFi channel should be scanned.
+      </para>
+      <para>
+        For example, to only scan on WiFi channels 1, 6 and 11, the
+        value <literal>0x842</literal> should be used.
+      </para>
+      <para>
+        To scan on all supported channels, specify
+        value <literal>0xFFFFFFFF</literal> (this is the value which
+        it used if no pointer to an <classname>S_CFWIFITUNING</classname>
+        structure is set
+        in <xref linkend="class.S_CFSETTINGS" />).
+      </para>
+      <note>
+        <para>
+          The Maestro control panel firmware only supports
+          IEEE 802.11b/g channels 1 through 14 in the 2.4GHz range.
+          This implies that
+          only bits 1-14 are taken into account.  The other bits in this
+          bitmask are reserved for possible future support of other
+          frequency ranges, such as the 3.6GHz range of 802.11y,
+          or the 5GHz range of 802.11a/h/j.
+        </para>
+      </note>
+    </attrib>
+    <attrib name="rescanInterval" type="U32">
+      <para>
+        Interval (in seconds) after which an access point should be
+        initiated.  If set to 0, an access point scan should only
+        be performed when connectivity to an access point is lost.
+      </para>
+    </attrib>
+    <attrib name="bssid" type="U8" count="6">
+      <para>
+        Basic Service Set Identifier (BSSID) of the wireless network to
+        connect to.  If
+        all-zeroes, the BSSID will be determined using probe requests (using
+        the SSID).
+      </para>
+      <para>
+        In an infrastructure WiFi network, the BSSID is the MAC address
+        of the wireless access point.  In this case, specifying the BSSID
+        only makes sense if a single access point is used.
+      </para>
+      <para>
+        In an ad-hoc (IBSS) network, the BSSID usually is a locally
+        administered MAC address.  However, the Maestro control panel firmware
+        uses a BSSID of
+        <literal>02:22:01:02:03:<replaceable>XX</replaceable></literal>,
+        with <replaceable>XX</replaceable> being the WiFi channel number.
+      </para>
+      <note>
+        <para>
+          The bssid field is currently ignored by Maestro control panel
+          firmware.
+        </para>
+      </note>
+    </attrib>
+    <attrib name="roamingMode" type="U8">
+      <para>Specifies the roaming strategy to use.</para>
+      <enum prefix="ROAMINGMODE">
+        <entry value="0" name="GENERIC">Generic</entry><entry value="1" name="SINGLE_AP">Single Access Point</entry>
+        <entry value="2" name="MULTIPLE_AP">Multiple Access Points</entry>
+      </enum>
+    </attrib>
+    <attrib name="region" type="U8">
+      <para>
+        Region to be used to determine the regulatory constraints for
+        transmit power and allowed frequency.
+      </para>
+      <enum>
+        <entry value="0">Use control panel default</entry><entry value="1">US (FCC)</entry>
+        <entry value="2">Canada (IC)</entry><entry value="3">Singapore</entry><entry value="4">EU (ETSI)</entry>
+        <entry value="5">Australia</entry><entry value="6">Republic of Korea</entry><entry value="7">Spain</entry>
+        <entry value="8">France</entry><entry value="9">Japan</entry>
+      </enum>
+      <note>
+        <para>
+          The region field is currently ignored by Maestro control panel
+          firmware.
+        </para>
+      </note>
+    </attrib>
+  </class>
+</grammar>
