@@ -1,6 +1,7 @@
-import { Attrib, AttribType, Class, deserializeValue } from "../grammar/types";
+import { Attrib, AttribType, Class, ClassNotFoundError, deserializeValue } from "../grammar/types";
 import { formatHex32 } from "./utils";
-import { CFDeserializer } from "./deserializer";
+import { CFArrayBufferStream, CFDeserializer } from "./deserializer";
+import { TypeRegistry } from "../grammar/registry";
 
 /**
  * The abstract base class of all properties. A property is a piece of data associated with a class attribute.
@@ -148,39 +149,6 @@ export class CFPointerProperty extends CFProperty {
   }
 }
 
-export class CFArray extends CFProperty {
-  items: CFPointer[];
-
-  constructor(type: Attrib, address: number, value: CFPointer[]) {
-    super(type, address);
-    this.items = value;
-  }
-
-  dereferenceItems(data: ArrayBuffer, deserializer?: CFDeserializer) {
-    if (this.attrib.pointerTarget === AttribType.dataPointer) {
-      throw new TypeError('Cannot use dereferenceItems on an array of DataPointers');
-    }
-
-    if (this.attrib.pointerTarget === AttribType.pointer) {
-      if (!deserializer) {
-        throw new TypeError('deserializer must be given for an array of Pointers');
-      }
-      return (this.items as CFObjectPointer[]).map((item) => (
-        item.dereference(deserializer, data)
-      ));
-    }
-
-    return (this.items as CFIntegerPointer[]).map((item) => (
-        item.dereference(data)
-    ));
-  }
-
-  inspect(): string {
-    const inspectItems = this.items.map((i) => i.inspect());
-    return `<${this.constructor.name}@${formatHex32(this.location)} items=[${inspectItems.join(', ')}], attrib=${this.attrib.inspect()}>`;
-  }
-}
-
 export class CFObject {
   type: Class;
   address: number;
@@ -211,5 +179,54 @@ export class CFString extends CFObject {
     const textBytes = (dataPtr.pointer as CFDataPointer).dereference(data, size.value);
     const td = new TextDecoder('utf-8');
     return td.decode(textBytes);
+  }
+}
+
+export class CFArray extends CFObject {
+  length: number;
+  itemClassId: number;
+
+  constructor(type: Class, address: number, properties: CFProperty[]) {
+    super(type, address, properties);
+
+    const lengthProp = this.get<CFIntegerProperty>("NrOfElements");
+    if (!lengthProp) {
+      throw new TypeError('Unexpected missing property for CFArray: NrOfElements');
+    }
+    this.length = lengthProp.value;
+
+    const typeProp = this.get<CFIntegerProperty>("TypeOfData");
+    if (!typeProp) {
+      throw new TypeError('Unexpected missing property for CFArray: TypeOfData');
+    }
+    this.itemClassId = typeProp.value;
+  }
+
+  getClass(typeRegistry: TypeRegistry) {
+    const klass = typeRegistry.findById(this.itemClassId);
+    if (!klass) throw new ClassNotFoundError(`${this.inspect()}: Class ID ${this.itemClassId} not found`);
+    return klass;
+  }
+
+  *getItemPointers(data: ArrayBuffer, typeRegistry: TypeRegistry) {
+    const baseAddress = this.address + this.type.size;
+    const bufferStream = new CFArrayBufferStream(data, true);
+    bufferStream.position = baseAddress;
+
+    for (let index = 0; index < this.length; index++) {
+      const location = bufferStream.position;
+      const address = bufferStream.readUint32();
+      yield new CFObjectPointer(location, this.getClass(typeRegistry), address);
+    }
+  }
+
+  *dereferenceItems(data: ArrayBuffer, deserializer: CFDeserializer) {
+    for (let item of this.getItemPointers(data, deserializer.typeRegistry)) {
+      yield item.dereference(deserializer, data);
+    }
+  }
+
+  inspect(): string {
+    return `<${this.constructor.name}@${formatHex32(this.address)} type=${this.type.inspect()}, length=${this.length}, itemClassId=${this.itemClassId}>`;
   }
 }

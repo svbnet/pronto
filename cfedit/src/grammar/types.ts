@@ -121,11 +121,11 @@ export class ClassRef {
 }
 
 const inspectTarget = (t: AttribType | ClassRef) => {
-    if (typeof t === "string") {
-      return `\`${t}\``;
-    } else {
-      return `<ClassRef: ${t.className}>`;
-    }
+  if (typeof t === "string") {
+    return t;
+  } else {
+    return `<ClassRef ${t.className}>`;
+  }
 };
 
 export class Attrib {
@@ -230,7 +230,7 @@ export class Attrib {
 
   inspect(): string {
     const optionalAttrs: string[] = [];
-    ["ancestor", "array", "count"].forEach((t) => {
+    ["ancestor", "array"].forEach((t) => {
       let val = this[t as keyof typeof this];
       if (val) {
         optionalAttrs.push(`${t}=${val}`);
@@ -239,18 +239,41 @@ export class Attrib {
     if (this.pointerTarget) {
       optionalAttrs.push(`pointerTarget=${inspectTarget(this.pointerTarget)}`);
     }
-    return `<Attrib name=${this.name}, type=${inspectTarget(this.type)}, ${optionalAttrs.join(
-      ", "
-    )}>`;
+    if (this.count > 1) {
+      optionalAttrs.push(`count=${this.count}`);
+    }
+    return `<Attrib{${inspectTarget(this.type)}} "${this.name}" ${optionalAttrs.join(", ")}>`;
   }
 }
 
+/**
+ * Represents a class definition. A class is a type that can contain one or more attributes.
+ */
 export class Class {
+  /**
+   * Name of the class. This is only used for references within the grammar.
+   */
   name: string;
+  /**
+   * Numeric ID of the class. This must match the ID in the binary format.
+   */
   id: number;
+  /**
+   * Child attributes.
+   */
   attributes: Attrib[];
+  /**
+   * [documentation only] An array of bitmasks that can be used to filter out attributes, depending on the
+   * object's mask value.
+   */
   masks: Mask[];
+  /**
+   * Documentation for this class.
+   */
   documentation?: Documentation;
+  /**
+   * Note documentation for this class.
+   */
   notes?: Documentation[];
 
   registry: TypeRegistry;
@@ -264,7 +287,7 @@ export class Class {
     attributes: Attrib[],
     masks: Mask[],
     documentation?: Documentation,
-    notes?: Documentation[],
+    notes?: Documentation[]
   ) {
     this.name = name;
     this.id = id;
@@ -303,6 +326,6 @@ export class Class {
   }
 
   inspect() {
-    return `<Class id=${this.id}, name=${this.name}>`;
+    return `<Class#${this.id} "${this.name}">`;
   }
 }

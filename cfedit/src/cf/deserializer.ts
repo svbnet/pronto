@@ -21,7 +21,8 @@ import {
 } from "./types";
 import { checkAligned32 } from "./utils";
 
-class CFArrayBufferStream {
+
+export class CFArrayBufferStream {
   readonly data: ArrayBuffer;
   position: number = 0;
   isLittleEndian: boolean;
@@ -85,12 +86,13 @@ interface RawCFObject {
 }
 
 export class CFDeserializer {
-  private readonly typeRegistry: TypeRegistry;
+  readonly typeRegistry: TypeRegistry;
   private readonly explicitObjectTypes = new Map<number, typeof CFObject>();
 
   constructor(typeRegistry: TypeRegistry) {
     this.typeRegistry = typeRegistry;
     this.registerObjectType(100, CFString);
+    this.registerObjectType(101, CFArray);
   }
 
   registerObjectType(classId: number, klass: typeof CFObject) {
@@ -123,43 +125,6 @@ export class CFDeserializer {
     const extensionCount = buf.peekUint8(2);
     const rootType = buf.peekUint8(3);
     return { objectType, extensionCount, rootType };
-  }
-
-  private readArray(buf: CFArrayBufferStream, attrib: Attrib): CFArray {
-    /**
-     * struct S_CFARRAY {
-     *  uint16_t TypeOfData;
-     *  uint16_t NrOfElements;
-     *  uint32_t elements[];
-     * }
-     */
-
-    const arrayPos = buf.position;
-
-    // Read attributes manually instead of deserializing them
-    const typeOfData = buf.readUint16();
-    const nrOfElements = buf.readUint16();
-    const elements: (CFObjectPointer | CFIntegerPointer)[] = [];
-
-    if (typeof attrib.pointerTarget === "string") {
-      for (let index = 0; index < nrOfElements; index++) {
-        const addr = buf.position;
-        const address = buf.readUint32();
-        elements.push(
-          new CFIntegerPointer(addr, attrib.pointerTarget!, address)
-        );
-      }
-    } else {
-      const elemClass = this.getClass(typeOfData);
-
-      for (let index = 0; index < nrOfElements; index++) {
-        const addr = buf.position;
-        const address = buf.readUint32();
-        elements.push(new CFObjectPointer(addr, elemClass, address));
-      }
-    }
-
-    return new CFArray(attrib, arrayPos, elements);
   }
 
   private readInteger(
@@ -198,23 +163,23 @@ export class CFDeserializer {
   private createProperty(buf: CFArrayBufferStream, attrib: Attrib): CFProperty {
     const pos = buf.position;
 
-    // Attribute is some kind of pointer or array
     if (
       attrib.type === AttribType.dataPointer ||
       attrib.type === AttribType.pointer
     ) {
-      if (attrib.array) return this.readArray(buf, attrib);
-
       // Attribute is a pointer
       let pointer: CFPointer;
       if (attrib.type === AttribType.pointer) {
+        // Points to a fixed size thing
         if (typeof attrib.pointerTarget === "string") {
+          // Points to U8, U16, etc
           pointer = new CFIntegerPointer(
             pos,
             attrib.pointerTarget,
             buf.readUint32()
           );
         } else {
+          // Points to object      
           pointer = new CFObjectPointer(
             pos,
             attrib.pointerTarget!.dereference(this.typeRegistry),
@@ -222,6 +187,7 @@ export class CFDeserializer {
           );
         }
       } else {
+        // Points to a blob
         pointer = new CFDataPointer(pos, buf.readUint32());
       }
       return new CFPointerProperty(attrib, pos, pointer);
