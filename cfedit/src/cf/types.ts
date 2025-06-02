@@ -1,4 +1,6 @@
-import { Attrib, AttribType, Class, ClassNotFoundError, deserializeValue } from "../grammar/types";
+import { Attrib, Class, ClassNotFoundError } from "../grammar/types";
+import { deserializeValue } from "../grammar/attrib-type";
+import { AttribType } from "../grammar/attrib-type";
 import { formatHex32 } from "./utils";
 import { CFArrayBufferStream, CFDeserializer } from "./deserializer";
 import { TypeRegistry } from "../grammar/registry";
@@ -74,7 +76,9 @@ export class CFIntegerArrayProperty extends CFProperty {
  * Abstract base class of all pointer. A pointer is an integer value that references another object, an integer, or a piece of data.
  */
 export abstract class CFPointer {
+  /** The location of this pointer. */
   location: number;
+  /** The location this pointer points to. */
   address: number;
 
   constructor(location: number, address: number) {
@@ -105,7 +109,7 @@ export class CFObjectPointer extends CFPointer {
   dereference(deserializer: CFDeserializer, data: ArrayBuffer): CFObject {
     if (this.isNull) throw new TypeError('Cannot dereference null pointer');
 
-    return deserializer.parse(data.slice(this.address));
+    return deserializer.deserializeObject(new CFArrayBufferStream(data, true).seek(this.address));
   }
 
   inspect(): string {

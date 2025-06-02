@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { GrammarParser } from "./src/grammar/parser";
-import { CFDeserializer } from "./src/cf/deserializer";
-import { CFArray, CFIntegerPointer, CFObject, CFObjectPointer, CFPointer, CFPointerProperty, CFString } from "./src/cf/types";
+import { GrammarParser } from "../src/grammar/parser";
+import { CFDeserializer } from "../src/cf/deserializer";
+import { CFArray, CFIntegerPointer, CFObject, CFObjectPointer, CFPointer, CFPointerProperty, CFString } from "../src/cf/types";
 
 
 const main = (cfPath: string) => {

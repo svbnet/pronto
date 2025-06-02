@@ -2,7 +2,6 @@ import { Document, DOMParser, Element, Node } from "@xmldom/xmldom";
 import { TypeRegistry } from "./registry";
 import {
   Attrib,
-  AttribType,
   Bit,
   Bitmask,
   Bits,
@@ -12,6 +11,7 @@ import {
   EnumEntry,
   Mask,
 } from "./types";
+import { AttribType } from "./attrib-type";
 
 const getChildElements = (element: Element) =>
   element.childNodes.filter(

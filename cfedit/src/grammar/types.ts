@@ -1,5 +1,6 @@
 import { Node } from "@xmldom/xmldom";
 import { TypeRegistry } from "./registry";
+import { ATTRIB_SIZES, AttribType } from "./attrib-type";
 
 export class ClassNotFoundError extends Error {
   constructor(message: string, options?: ErrorOptions) {
@@ -9,63 +10,6 @@ export class ClassNotFoundError extends Error {
 }
 
 export type Documentation = Node[];
-
-export enum AttribType {
-  u8 = "U8",
-  u16 = "U16",
-  u32 = "U32",
-  s8 = "S8",
-  s16 = "S16",
-  s32 = "S32",
-  dataLenU16 = "DataLenU16",
-  dataLenU32 = "DataLenU32",
-  colorRef = "T_ColorRef",
-  gid = "T_Gid",
-  irDuration = "T_IrDuration",
-  position = "T_Position",
-  dimension = "T_Dimension",
-  pointer = "Pointer",
-  dataPointer = "DataPointer",
-}
-
-export const deserializeValue = (
-  type: AttribType,
-  data: ArrayBuffer,
-  offset = 0
-) => {
-  const dv = new DataView(data);
-  switch (type) {
-    case AttribType.u8:
-      return dv.getUint8(offset);
-
-    case AttribType.s8:
-      return dv.getInt8(offset);
-
-    case AttribType.dataLenU16:
-    case AttribType.u16:
-      return dv.getUint16(offset, true);
-
-    case AttribType.colorRef:
-    case AttribType.gid:
-    case AttribType.irDuration:
-    case AttribType.position:
-    case AttribType.dimension:
-    case AttribType.pointer:
-    case AttribType.dataPointer:
-    case AttribType.dataLenU32:
-    case AttribType.u32:
-      return dv.getUint32(offset, true);
-
-    case AttribType.s16:
-      return dv.getInt16(offset, true);
-
-    case AttribType.s32:
-      return dv.getInt32(offset, true);
-
-    default:
-      throw new TypeError(`Cannot convert to a number: ${type}`);
-  }
-};
 
 export interface EnumEntry {
   value: number;
@@ -201,31 +145,7 @@ export class Attrib {
       return this.type.dereference(this.class.registry).size;
     }
 
-    switch (this.type) {
-      case AttribType.u8:
-      case AttribType.s8:
-        return 1;
-
-      case AttribType.u16:
-      case AttribType.s16:
-      case AttribType.dataLenU16:
-      case AttribType.gid:
-      case AttribType.irDuration:
-        return 2;
-
-      case AttribType.u32:
-      case AttribType.s32:
-      case AttribType.dataLenU32:
-      case AttribType.colorRef:
-      case AttribType.position:
-      case AttribType.dimension:
-      case AttribType.pointer:
-      case AttribType.dataPointer:
-        return 4;
-
-      default:
-        return 0;
-    }
+    return ATTRIB_SIZES[this.type];
   }
 
   inspect(): string {
